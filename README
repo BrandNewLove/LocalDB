@@ -1,0 +1,36 @@
+QT Android 打包本地数据库文件进apk
+1.在工程源码路径创建assets文件夹，将要打包的文件和目录拷贝到assets目录下，本项目中主要添加了test.db文件，放在assets/db目录下；
+
+2.在工程目录 .pro文件中加入以下内容：
+deployment.files += $$files($$PWD/assets/*)
+deployment.path = /assets
+INSTALLS += deployment
+
+3.asset资源和qrc资源，是被编译到二进制文件里了,因此需要以下两个步骤取出db文件：
+A.读取需要的文件内容：
+    QByteArray data;
+    QFile fileSrc("assets:/db/test.db");
+    if(fileSrc.open(QFile::ReadOnly)){
+        data = fileSrc.readAll();
+        fileSrc.close();
+    } 
+B.把文件内容写到本地：
+    QFile fileDest("test.db");
+	  if(fileDest.open(QFile::WriteOnly)){
+        fileDest.write(data);
+        fileDest.close();
+    }
+    
+4.经过以上步骤，会在Android设备上生成test.db文件，参考路径：
+/data/data/org.qtproject.example.LocalDB/files/test.db
+
+
+测试环境：
+Windows 7 SP1 64bit
+JDK 1.8
+Qt Android 5.8.0
+SDK 27.0.1
+NDK R15C x86
+ANT 1.10.3
+测试设备：
+Android 4.4.2
