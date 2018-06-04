@@ -1,2 +1,2 @@
 # LocalDB
-Qt Android SQLite Application, Used Local Database File
+Qt Android SQLite Application, Use Local Database File
